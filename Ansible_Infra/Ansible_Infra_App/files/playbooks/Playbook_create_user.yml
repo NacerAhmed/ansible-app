@@ -1,0 +1,38 @@
+- name: Create user
+
+  gather_facts: true
+
+  hosts: var_group
+
+  become: yes
+
+  tasks:
+
+
+
+#Creating group if not exist 
+
+
+
+    - name: create group "var_group"
+
+      ansible.builtin.group:
+
+        name: var_group
+
+        state: present
+
+       
+
+#Creating Users assigned to groups based on qualif,dev and dev hosts
+
+    - user:
+
+        name: "var_username"
+
+        password: "{{ 'var_password' | password_hash('sha512') }}"
+
+        state: var_status
+
+        group: var_group
+
