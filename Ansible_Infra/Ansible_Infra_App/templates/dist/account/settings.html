@@ -71,6 +71,7 @@
 									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
+											
 											<span class="svg-icon svg-icon-2">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 													<rect x="2" y="2" width="9" height="9" rx="2" fill="black" />
@@ -103,11 +104,11 @@
 											</span>
 											<!--end::Svg Icon-->
 										</span>
-										<span class="menu-title">Team members</span>
+										<span class="menu-title">Members</span>
 										<span class="menu-arrow"></span>
 									</span>
 				
-									<div class="menu-sub menu-sub-accordion show menu-active-bg">
+									<div class="menu-sub menu-sub-accordion menu-active-bg">
 										<div class="menu-item">
 											<a class="menu-link" href="{% url 'users' %}">
 												<span class="menu-bullet">
@@ -117,9 +118,9 @@
 											</a>
 										</div>
 									</div>
-									<div class="menu-sub menu-sub-accordion show menu-active-bg">
+									<div class="menu-sub menu-sub-accordion menu-active-bg">
 										<div class="menu-item">
-											<a class="menu-link active" href="{% url 'add_user' %}">
+											<a class="menu-link" href="{% url 'add_user' %}">
 												<span class="menu-bullet">
 													<span class="bullet bullet-dot"></span>
 												</span>
@@ -242,15 +243,30 @@
                                 </div>
 							
 						
-							  
-								
-								<div data-kt-menu-trigger="click" class="menu-item here  menu-accordion">
+						
+
+								<div data-kt-menu-trigger="click" class="menu-item here show  menu-accordion">
 									
 									{% if user.is_superuser == True %}
-									<div class="menu-item">
+									<div class="menu-item ">
 										<div class="menu-content pt-8 pb-2">
 											<span class="menu-section text-muted text-uppercase fs-8 ls-1">Settings</span>
 										</div>
+									</div>
+									<div class="menu-item here  menu-accordion">
+										<a class="menu-link" href="{% url 'groups' %}" title="" >
+											<span class="menu-icon">
+												<!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
+												<span class="svg-icon svg-icon-2">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z" fill="black"></path>
+														<path opacity="0.3" d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z" fill="black"></path>
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+											</span>
+											<span class="menu-title">Groups</span>
+										</a>
 									</div>
 									<span class="menu-link">
 										<span class="menu-icon">
@@ -288,14 +304,14 @@
 										</div>
 									</div>
                                 </div>
-								<div data-kt-menu-trigger="click" class="menu-item here   menu-accordion">
+								<div data-kt-menu-trigger="click" class="menu-item here  show  menu-accordion">
 									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
 											<span class="svg-icon svg-icon-2">
 												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path d="M18 21.6C16.6 20.4 9.1 20.3 6.3 21.2C5.7 21.4 5.1 21.2 4.7 20.8L2 18C4.2 15.8 10.8 15.1 15.8 15.8C16.2 18.3 17 20.5 18 21.6ZM18.8 2.8C18.4 2.4 17.8 2.20001 17.2 2.40001C14.4 3.30001 6.9 3.2 5.5 2C6.8 3.3 7.4 5.5 7.7 7.7C9 7.9 10.3 8 11.7 8C15.8 8 19.8 7.2 21.5 5.5L18.8 2.8Z" fill="black"></path>
-													<path opacity="0.3" d="M21.2 17.3C21.4 17.9 21.2 18.5 20.8 18.9L18 21.6C15.8 19.4 15.1 12.8 15.8 7.8C18.3 7.4 20.4 6.70001 21.5 5.60001C20.4 7.00001 20.2 14.5 21.2 17.3ZM8 11.7C8 9 7.7 4.2 5.5 2L2.8 4.8C2.4 5.2 2.2 5.80001 2.4 6.40001C2.7 7.40001 3.00001 9.2 3.10001 11.7C3.10001 15.5 2.40001 17.6 2.10001 18C3.20001 16.9 5.3 16.2 7.8 15.8C8 14.2 8 12.7 8 11.7Z" fill="black"></path>
+													<path opacity="0.3" d="M22.0318 8.59998C22.0318 10.4 21.4318 12.2 20.0318 13.5C18.4318 15.1 16.3318 15.7 14.2318 15.4C13.3318 15.3 12.3318 15.6 11.7318 16.3L6.93177 21.1C5.73177 22.3 3.83179 22.2 2.73179 21C1.63179 19.8 1.83177 18 2.93177 16.9L7.53178 12.3C8.23178 11.6 8.53177 10.7 8.43177 9.80005C8.13177 7.80005 8.73176 5.6 10.3318 4C11.7318 2.6 13.5318 2 15.2318 2C16.1318 2 16.6318 3.20005 15.9318 3.80005L13.0318 6.70007C12.5318 7.20007 12.4318 7.9 12.7318 8.5C13.3318 9.7 14.2318 10.6001 15.4318 11.2001C16.0318 11.5001 16.7318 11.3 17.2318 10.9L20.1318 8C20.8318 7.2 22.0318 7.59998 22.0318 8.59998Z" fill="black"></path>
+													<path d="M4.23179 19.7C3.83179 19.3 3.83179 18.7 4.23179 18.3L9.73179 12.8C10.1318 12.4 10.7318 12.4 11.1318 12.8C11.5318 13.2 11.5318 13.8 11.1318 14.2L5.63179 19.7C5.23179 20.1 4.53179 20.1 4.23179 19.7Z" fill="black"></path>
 												</svg>
 											</span>
 											<!--end::Svg Icon-->
@@ -303,10 +319,12 @@
 										<span class="menu-title">Setup</span>
 										{% if setup_status == 'completed' %}
 										<!--begin::Svg Icon | path: assets/media/icons/duotune/arrows/arr016.svg-->
-										<span class="svg-icon svg-icon-success svg-icon-1hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-										<path opacity="0.3" d="M10.3 14.3L11 13.6L7.70002 10.3C7.30002 9.9 6.7 9.9 6.3 10.3C5.9 10.7 5.9 11.3 6.3 11.7L10.3 15.7C9.9 15.3 9.9 14.7 10.3 14.3Z" fill="black"/>
-										<path d="M22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2C17.5 2 22 6.5 22 12ZM11.7 15.7L17.7 9.70001C18.1 9.30001 18.1 8.69999 17.7 8.29999C17.3 7.89999 16.7 7.89999 16.3 8.29999L11 13.6L7.70001 10.3C7.30001 9.89999 6.69999 9.89999 6.29999 10.3C5.89999 10.7 5.89999 11.3 6.29999 11.7L10.3 15.7C10.5 15.9 10.8 16 11 16C11.2 16 11.5 15.9 11.7 15.7Z" fill="black"/>
-										</svg></span>
+										<span class="svg-icon svg-icon-2 svg-icon-success">
+											<svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24">
+												<path d="M10.0813 3.7242C10.8849 2.16438 13.1151 2.16438 13.9187 3.7242V3.7242C14.4016 4.66147 15.4909 5.1127 16.4951 4.79139V4.79139C18.1663 4.25668 19.7433 5.83365 19.2086 7.50485V7.50485C18.8873 8.50905 19.3385 9.59842 20.2758 10.0813V10.0813C21.8356 10.8849 21.8356 13.1151 20.2758 13.9187V13.9187C19.3385 14.4016 18.8873 15.491 19.2086 16.4951V16.4951C19.7433 18.1663 18.1663 19.7433 16.4951 19.2086V19.2086C15.491 18.8873 14.4016 19.3385 13.9187 20.2758V20.2758C13.1151 21.8356 10.8849 21.8356 10.0813 20.2758V20.2758C9.59842 19.3385 8.50905 18.8873 7.50485 19.2086V19.2086C5.83365 19.7433 4.25668 18.1663 4.79139 16.4951V16.4951C5.1127 15.491 4.66147 14.4016 3.7242 13.9187V13.9187C2.16438 13.1151 2.16438 10.8849 3.7242 10.0813V10.0813C4.66147 9.59842 5.1127 8.50905 4.79139 7.50485V7.50485C4.25668 5.83365 5.83365 4.25668 7.50485 4.79139V4.79139C8.50905 5.1127 9.59842 4.66147 10.0813 3.7242V3.7242Z" fill="#00A3FF"></path>
+												<path class="permanent" d="M14.8563 9.1903C15.0606 8.94984 15.3771 8.9385 15.6175 9.14289C15.858 9.34728 15.8229 9.66433 15.6185 9.9048L11.863 14.6558C11.6554 14.9001 11.2876 14.9258 11.048 14.7128L8.47656 12.4271C8.24068 12.2174 8.21944 11.8563 8.42911 11.6204C8.63877 11.3845 8.99996 11.3633 9.23583 11.5729L11.3706 13.4705L14.8563 9.1903Z" fill="white"></path>
+											</svg>
+										</span>
 										{% else %}
 										<span class="svg-icon svg-icon-danger svg-icon-1hx"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 										<path opacity="0.3" d="M12 10.6L14.8 7.8C15.2 7.4 15.8 7.4 16.2 7.8C16.6 8.2 16.6 8.80002 16.2 9.20002L13.4 12L12 10.6ZM10.6 12L7.8 14.8C7.4 15.2 7.4 15.8 7.8 16.2C8 16.4 8.3 16.5 8.5 16.5C8.7 16.5 8.99999 16.4 9.19999 16.2L12 13.4L10.6 12Z" fill="black"/>
@@ -337,8 +355,19 @@
 											</a>
 										</div>
 									</div>
+									<div class="menu-sub menu-sub-accordion  menu-active-bg">
+										<div class="menu-item">
+											<a class="menu-link " href="{% url 'add_playbook' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+												<span class="menu-title">Add playbook </span>
+											</a>
+										
+										</div>
+									</div>
                                 </div>
-								<div data-kt-menu-trigger="click" class="menu-item here  menu-accordion">
+								<div data-kt-menu-trigger="click" class="menu-item here show  menu-accordion">
 									<span class="menu-link">
 										<span class="menu-icon">
 											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
@@ -1377,8 +1406,12 @@
 									<div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
 										<!--begin::Card title-->
 										<div class="card-title m-0">
-											<img class="mw-50px mw-lg-75px" width="30" src="{% static 'media//avatars/blank.png'%}  " alt="image" />
-											 <h3 class="fw-bolder m-0"> Add new user </h3>
+											<span class="svg-icon svg-icon-3x svg-icon-danger d-block my-2">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+													<path d="M6.28548 15.0861C7.34369 13.1814 9.35142 12 11.5304 12H12.4696C14.6486 12 16.6563 13.1814 17.7145 15.0861L19.3493 18.0287C20.0899 19.3618 19.1259 21 17.601 21H6.39903C4.87406 21 3.91012 19.3618 4.65071 18.0287L6.28548 15.0861Z" fill="black"></path>
+													<rect opacity="0.3" x="8" y="3" width="8" height="8" rx="4" fill="black"></rect>
+												</svg>
+											</span>											 <h3 class="fw-bolder m-0"> Add new user </h3>
 										</div>
 										<!--end::Card title-->
 									</div>
@@ -1407,7 +1440,7 @@
 															<label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow" data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change avatar">
 																<i class="bi bi-pencil-fill fs-7"></i>
 																<!--begin::Inputs-->
-																<input type="file" name="avatar"  />
+																<input required type="file" name="avatar"  />
 																<input type="hidden" name="avatar_remove" />
 																<!--end::Inputs-->
 															</label>
@@ -1442,12 +1475,12 @@
 														<div class="row">
 															<!--begin::Col-->
 															<div class="col-lg-6 fv-row">
-																<input type="text" name="fname" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="First name" />
+																<input required type="text" name="fname" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="First name" />
 															</div>
 															<!--end::Col-->
 															<!--begin::Col-->
 															<div class="col-lg-6 fv-row">
-																<input type="text" name="lname" class="form-control form-control-lg form-control-solid" placeholder="Last name"  />
+																<input required type="text" name="lname" class="form-control form-control-lg form-control-solid" placeholder="Last name"  />
 															</div>
 															<!--end::Col-->
 														</div>
@@ -1464,7 +1497,7 @@
 													<!--end::Label-->
 													<!--begin::Col-->
 													<div class="col-lg-8 fv-row">
-														<input  type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="user@gmail.com"  />
+														<input required  type="email" name="email" class="form-control form-control-lg form-control-solid" placeholder="user@gmail.com"  />
 													</div>
 													<!--end::Col-->
 												</div>
@@ -1480,7 +1513,7 @@
 													<!--end::Label-->
 													<!--begin::Col-->
 													<div class="col-lg-8 fv-row">
-														<input type="tel" name="phone" class="form-control form-control-lg form-control-solid" placeholder="+216 . .  . . .  . . ." />
+														<input required type="tel" name="phone" class="form-control form-control-lg form-control-solid" placeholder="+216 . .  . . .  . . ." />
 													</div>
 													<!--end::Col-->
 												</div>
@@ -1494,7 +1527,7 @@
 													<!--end::Label-->
 													<!--begin::Col-->
 													<div class="col-lg-8 fv-row">
-														<input type="text" name="job_title" class="form-control form-control-lg form-control-solid" placeholder="Member job title" />
+														<input required type="text" name="job_title" class="form-control form-control-lg form-control-solid" placeholder="Member job title" />
 													</div>
 													<!--end::Col-->
 												</div>
@@ -1509,8 +1542,7 @@
 													<!--end::Label-->
 													<!--begin::Col-->
 													<div class="col-lg-8 fv-row">
-														<select name="group"  data-control="select2" data-placeholder="Select a group..." class="form-select form-select-solid form-select-lg fw-bold">
-															<option >Choose User Group</option>
+														<select required name="group"  data-control="select2" data-placeholder="Select a group..." class="form-select form-select-solid form-select-lg fw-bold">
 															{% for group in groups %}
 																<option value="{{group.name}}" >{{group.description}}</option>
 																
@@ -1529,8 +1561,7 @@
 													<!--begin::Col-->
 													<div class="col-lg-8 fv-row">
 														<!--begin::Input-->
-														<select name="usertype" aria-label="Select a Language" data-control="select2" data-placeholder="Select type..." class="form-select form-select-solid form-select-lg">
-															<option value="">Select a type...</option>
+														<select  required name="usertype" aria-label="Select a Language" data-control="select2" data-placeholder="Select type..." class="form-select form-select-solid form-select-lg">
 															<option value="simple">Simple user</option>
 															<option  value="admin">Administrator</option>
 														</select>
@@ -1551,7 +1582,7 @@
 														<div class="row">
 															<!--begin::Col-->
 															<div class="col-lg-6 fv-row">
-																<input type="text" name="username" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Username" />
+																<input  required type="text" name="username" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Username" />
 															</div>
 															<!--end::Col-->
 															<!--begin::Col-->
@@ -1563,7 +1594,7 @@
 																		<!--end::Label-->
 																		<!--begin::Input wrapper-->
 																		<div class="position-relative mb-3">
-																			<input class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="password" autocomplete="off" />
+																			<input required class="form-control form-control-lg form-control-solid" type="password" placeholder="" name="password" autocomplete="off" />
 																			<span class="btn btn-sm btn-icon position-absolute translate-middle top-50 end-0 me-n2" data-kt-password-meter-control="visibility">
 																				<i class="bi bi-eye-slash fs-2"></i>
 																				<i class="bi bi-eye fs-2 d-none"></i>

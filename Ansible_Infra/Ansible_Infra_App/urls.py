@@ -12,6 +12,7 @@ urlpatterns = [
     path('user/edit-account/<int:account_id>', edit_account, name='edit_account' ),
     path('users/add-user', add_user, name='add_user' ),
     path('servers', servers, name='servers' ),
+    path('groups', groups, name='groups' ),
     path('access', access, name='access' ),
     path('access/add-user-access', create_user_access, name='add_user_access' ),
     path('servers/addserver', addserver, name='addserver' ),

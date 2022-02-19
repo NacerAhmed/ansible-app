@@ -24,7 +24,7 @@ def index(request):
         profiles=Profile.objects.all()
         if request.user.is_superuser == True:
             profile=Profile.objects.get(user_id=request.user.id)
-           
+
             servers=Server.objects.all()
             users=User.objects.all()
             access=Access.objects.all()
@@ -39,6 +39,7 @@ def index(request):
                
                 list_users=User.objects.filter(groups__name=group.name, is_superuser=False)                   
                 list_servers=Server.objects.filter(group=group.name) 
+                
                 user_group_count[group.id]=list_users.count()
                 group_list_servers[group.id]=list_servers.count()
                 
@@ -119,7 +120,7 @@ def users(request):
     if  request.user.is_authenticated:
         
         if request.user.is_superuser==True:
-            list_users=User.objects.all()
+            list_users=User.objects.all().order_by('date_joined')
             profiles=Profile.objects.all()
             actif_users=User.objects.filter(is_active=True)
             inactif_users=User.objects.filter(is_active=False)
@@ -259,9 +260,107 @@ def add_user(request):
             
     
     
-    
-    
+def groups(request):
+    if  request.user.is_authenticated: 
+        if request.user.is_superuser==True:
+            
 
+            profile=Profile.objects.get(user_id=request.user.id)
+            profiles=Profile.objects.all()
+            groups=Group.objects.all()
+            users=User.objects.all()
+            rest=User.objects.all().count()-10
+
+            servers=Server.objects.all()
+            access_list=Access.objects.all()
+            users_group={}
+            group_list_servers={}
+            group_list_access={}
+            
+            for group in groups:
+                list_users=User.objects.filter(groups__name=group.name, is_superuser=False)                   
+                list_servers=Server.objects.filter(group=group.name) 
+                list_access=Access.objects.filter(group_id=group.id) 
+                users_group[group.id]=list_users.count()
+                group_list_servers[group.id]=list_servers.count()
+                group_list_access[group.id]=list_access.count()
+            
+            
+            context={'rest':rest, 'users_group':users_group,'group_list_servers':group_list_servers,'group_list_access':group_list_access,'profile':profile,'profiles':profiles,'groups':groups,'users':users,'servers':servers,'access_list':access_list}
+            
+
+            if request.method == 'POST' and 'create_group' in request.POST:
+                group_id = request.POST['group_id']
+                group_name = request.POST['group_name']
+                
+                group=Group.objects.filter(name=group_id)
+                
+                if group.count() > 0 :
+                    exist=True
+                    context={'rest':rest,'exist':exist, 'users_group':users_group,'group_list_servers':group_list_servers,'group_list_access':group_list_access,'profile':profile,'profiles':profiles,'groups':groups,'users':users,'servers':servers,'access_list':access_list}
+                    
+                    
+                            
+                    
+                    return render (request,'dist/apps/projects/targets.html',context)
+                    
+                else:
+                    exist=False
+                    new_group=Group(name=group_id,description=group_name ) 
+                    new_group.save()
+                    
+                    master_server=Server.objects.get(master=True)
+                    setup=Setup.objects.get(master_id=master_server.id)
+                    config=setup.config
+                    backup_dir=setup.backup_directory
+                    inventory=setup.inventory
+                    
+                    
+                    t = paramiko.Transport((master_server.ip, 22))
+                    t.connect(username=master_server.superuser_name, password=master_server.superuser_password)
+                    sftp = paramiko.SFTPClient.from_transport(t)
+                    sftp.get(inventory,os.path.abspath(backup_dir)+'\inventory.txt')
+
+                   
+                                         
+                    
+                   
+                    with open(os.path.join(backup_dir, 'inventory.txt'), 'r') as read_obj, open(os.path.join(backup_dir, 'inventory2.txt'), 'w') as write_obj:
+                        write_obj.write('[' +group_id+ ']\n')
+                        for line in read_obj:
+                            write_obj.write(line)
+
+                    os.remove(os.path.join(backup_dir, 'inventory.txt'))
+                    os.rename(os.path.join(backup_dir, 'inventory2.txt'), os.path.join(backup_dir, 'inventory.txt'))
+                        
+                    
+ 
+                   
+                    t = paramiko.Transport((master_server.ip, 22))
+                    t.connect(username=master_server.superuser_name, password=master_server.superuser_password)
+                    sftp = paramiko.SFTPClient.from_transport(t)
+                    sftp.put(os.path.join(backup_dir, 'inventory.txt'), inventory)
+                    
+                    
+                    groups=Group.objects.all()
+                    for group in groups:
+                        list_users=User.objects.filter(groups__name=group.name, is_superuser=False)                   
+                        list_servers=Server.objects.filter(group=group.name) 
+                        list_access=Access.objects.filter(group_id=group.id) 
+                        users_group[group.id]=list_users.count()
+                        group_list_servers[group.id]=list_servers.count()
+                        group_list_access[group.id]=list_access.count()
+                        
+                    context={'rest':rest,'exist':exist, 'users_group':users_group,'group_list_servers':group_list_servers,'group_list_access':group_list_access,'profile':profile,'profiles':profiles,'groups':groups,'users':users,'servers':servers,'access_list':access_list}
+                    return render (request,'dist/apps/projects/targets.html',context)
+                
+            return render (request,'dist/apps/projects/targets.html',context)        
+                    
+        else:
+            return redirect('home')
+        
+        
+    return redirect('login')
 
 def servers(request):
     
@@ -357,7 +456,7 @@ def addserver(request):
                         print (lines)
                         for ind,line in enumerate(lines):
                             if line.strip().startswith('['+ group +']'):
-                                lines[ind] = (line+"     "+'\n'+ server_ip + '  ansible_ssh_user='+superuser_name+' ansible_ssh_pass='+superuser_password+' ansible_sudo_pass='+superuser_password+'\n')
+                                lines[ind] = (line+ server_ip + '  ansible_ssh_user='+superuser_name+' ansible_ssh_pass='+superuser_password+' ansible_sudo_pass='+superuser_password+'\n')
                                 break
                         for line in lines:
                             out.write(line)
@@ -421,9 +520,10 @@ def create_user_access(request):
     if request.user.is_authenticated:
         if request.user.is_superuser == True:
             profile_avatar=Profile.objects.get(user_id=request.user.id)
-            servers=Server.objects.all()
-            groups=request.user.groups.all()
+            servers=Server.objects.filter(master=False)
+            groups=Group.objects.all()
             context={'servers':servers,'groups':groups,'profile_avatar':profile_avatar}
+            
             if request.method == 'POST':
                 
                 master_server=Server.objects.get(master=True)
@@ -791,10 +891,30 @@ def setup(request):
                         setup.status=status
                         setup.play_rem_dir=play_rem_dir
                         setup.exec_play_rem_dir=exec_play_rem_dir
-                        setup.backup_directory=backup.replace("\\" ,"/")
-                        palybooks_directory=playbooks.replace("\\" ,"/")
+                        backup_dir=backup.replace("\\" ,"/")
+                        playbooks_dir=playbooks.replace("\\" ,"/")
+                        setup.backup_directory=backup_dir
+                        palybooks_directory=playbooks_dir
                         setup.palybooks_directory=palybooks_directory
                         setup.save()
+
+                        t = paramiko.Transport((master.ip, 22))
+                        t.connect(username=master.superuser_name, password=master.superuser_password)
+                        sftp = paramiko.SFTPClient.from_transport(t)
+                        sftp.get(config,os.path.join(backup_dir, 'ansible.cfg'))
+                        
+                        
+                        with open(os.path.join(backup_dir, 'ansible.cfg'),"w") as f:
+                            f.write('[defaults]'+'\n')
+                            f.write('inventory='+inventory+'\n')
+                            f.write('remote_user='+master.superuser_name+'\n')
+                            f.write('host_key_checking = false')
+                            
+                        t = paramiko.Transport((master.ip,22 ))
+                        t.connect(username=master.superuser_name, password=master.superuser_password)
+                        sftp = paramiko.SFTPClient.from_transport(t)
+                        sftp.put(os.path.join(os.path.abspath(backup_dir), 'ansible.cfg'), config)
+                        
                         
                         port=22
                         ssh = paramiko.SSHClient()
@@ -815,8 +935,11 @@ def setup(request):
                                 t.connect(username=master.superuser_name, password=master.superuser_password)
                                 sftp = paramiko.SFTPClient.from_transport(t)
                                 sftp.put(os.path.join(os.path.abspath(palybooks_directory), file), play_rem_dir + "/" + file)
+                            
                             finally:
                                 t.close()
+                        
+                        
                         return redirect('setup')
                 else:
                     return render (request,'dist/widgets/setup.html',context)
