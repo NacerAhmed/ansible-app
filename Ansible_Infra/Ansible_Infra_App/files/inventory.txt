@@ -1,10 +1,6 @@
 [qualif]
-192.168.33.4  ansible_ssh_user=slave4 ansible_ssh_pass=slave4 ansible_sudo_pass=slave4
 [dev]
-192.168.33.3  ansible_ssh_user=slave3 ansible_ssh_pass=slave3 ansible_sudo_pass=slave3
 [prod]
-192.168.33.14  ansible_ssh_user=vagrant ansible_ssh_pass=vagrant ansible_sudo_pass=vagrant
-192.168.33.13  ansible_ssh_user=vagrant ansible_ssh_pass=vagrant ansible_sudo_pass=vagrant
 [all:vars]
 ansible_connectin=ssh
 host_key_checking=False

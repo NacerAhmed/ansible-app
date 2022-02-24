@@ -1511,7 +1511,7 @@ License: For each use you must have a valid license purchased only from above li
 									<div class="card-header border-0 cursor-pointer" role="button" data-bs-toggle="collapse" data-bs-target="#kt_account_profile_details" aria-expanded="true" aria-controls="kt_account_profile_details">
 										<!--begin::Card title-->
 										<div class="card-title m-0">
-											<img class="mw-50px mw-lg-75px" width="30" src="{% static 'media/avatars/file.png'%}  " alt="image" />
+											<img class="mw-50px mw-lg-75px me-4" width="30" src="{% static 'media/stock/600x400/yml.png'%}  " alt="image" />
 											 <h3 class="fw-bolder m-0"> Add New Playbook </h3>
 										</div>
 										<!--end::Card title-->
@@ -1535,7 +1535,7 @@ License: For each use you must have a valid license purchased only from above li
 														<!--begin::Image input-->
                                                         <input type="button" id="click-input" class="btn btn-sm btn-light-primary me-2 fw-bolder" value="Select file your local playbooksdirectory" onclick="document.getElementById('file').click();" />
                                                         <label for="click-input" id="file-name"></label>
-                                                        <input type="file" style="display:none;" id="file" name="file" >
+                                                        <input type="file" style="display:none;" id="file" name="file" required >
                                                         <script>
                                                             file = document.getElementById('file')
                                                             labelElement = document.getElementById('file-name')
@@ -1569,7 +1569,7 @@ License: For each use you must have a valid license purchased only from above li
                                                     <label class="col-lg-4 col-form-label fw-bold fs-6">Playbook File Name</label>
 
                                                     <div class="col-lg-6 fv-row">
-                                                        <input type="text" id="file_name" name="file_name" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Name" />
+                                                        <input required type="text" id="file_name" name="file_name" class="form-control form-control-lg form-control-solid mb-3 mb-lg-0" placeholder="Name" />
                                                     </div>
 													<!--end::Col-->
 												</div>
@@ -1597,7 +1597,7 @@ License: For each use you must have a valid license purchased only from above li
 														<!--end::Content-->
 														<!--begin::Action-->
 														<div class="form-check form-check-solid form-switch fv-row">
-															<input class="form-check-input w-45px h-30px" type="checkbox" id="alllogin" name="alllogin" checked="checked" />
+															<input required class="form-check-input w-45px h-30px" type="checkbox" id="alllogin" name="alllogin"  />
 															<label class="form-check-label" for="alllogin"></label>
 														</div>
 														<!--end::Action-->

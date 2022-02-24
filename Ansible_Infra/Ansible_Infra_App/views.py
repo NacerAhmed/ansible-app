@@ -12,7 +12,8 @@ from django.db.models import Q
 import fileinput
 import subprocess
 import sys
-
+import logging
+from django.contrib import messages
 
 
 
@@ -654,7 +655,98 @@ def create_user_access(request):
         return redirect('home')
 
     
+def install_httpd(request,server_id):
+    
+    if request.user.is_authenticated:
+        if request.user.is_superuser == True:
+            setup=Setup.objects.get(status='completed')
+            server=Server.objects.get(pk=server_id)
+            play_rem_dir=setup.play_rem_dir
+            inventory=setup.inventory
+            master=Server.objects.get(id=setup.master_id)
+            
+            ansible_playbook_command = 'ansible-playbook '+play_rem_dir+'/Playbook_install_apache.yml -i '+inventory+' --limit '+server.ip 
 
+            ssh=paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(master.ip,22,master.superuser_name,master.superuser_password)
+            stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+            error=stderr.readlines()
+            result=stdout.readlines()  
+            
+            messages.success(request,'success')
+
+    return redirect('servers')
+
+def install_php(request,server_id):
+    
+    if request.user.is_authenticated:
+        if request.user.is_superuser == True:
+            setup=Setup.objects.get(status='completed')
+            server=Server.objects.get(pk=server_id)
+            play_rem_dir=setup.play_rem_dir
+            inventory=setup.inventory
+            master=Server.objects.get(id=setup.master_id)
+            
+            ansible_playbook_command = 'ansible-playbook '+play_rem_dir+'/Playbook_install_php.yml -i '+inventory+' --limit '+server.ip 
+
+            ssh=paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(master.ip,22,master.superuser_name,master.superuser_password)
+            stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+            error=stderr.readlines()
+            result=stdout.readlines()  
+            
+            messages.success(request,'success')
+
+    return redirect('servers')
+
+
+def install_mariadb(request,server_id):
+    
+    if request.user.is_authenticated:
+        if request.user.is_superuser == True:
+            setup=Setup.objects.get(status='completed')
+            server=Server.objects.get(pk=server_id)
+            play_rem_dir=setup.play_rem_dir
+            inventory=setup.inventory
+            master=Server.objects.get(id=setup.master_id)
+            
+            ansible_playbook_command = 'ansible-playbook '+play_rem_dir+'/Playbook_install_MariaDb.yml -i '+inventory+' --limit '+server.ip 
+
+            ssh=paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(master.ip,22,master.superuser_name,master.superuser_password)
+            stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+            error=stderr.readlines()
+            result=stdout.readlines()  
+            
+            messages.success(request,'success')
+
+    return redirect('servers')
+
+def install_git(request,server_id):
+    
+    if request.user.is_authenticated:
+        if request.user.is_superuser == True:
+            setup=Setup.objects.get(status='completed')
+            server=Server.objects.get(pk=server_id)
+            play_rem_dir=setup.play_rem_dir
+            inventory=setup.inventory
+            master=Server.objects.get(id=setup.master_id)
+            
+            ansible_playbook_command = 'ansible-playbook '+play_rem_dir+'/Playbook_install_Git.yml -i '+inventory+' --limit '+server.ip 
+
+            ssh=paramiko.SSHClient()
+            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            ssh.connect(master.ip,22,master.superuser_name,master.superuser_password)
+            stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+            error=stderr.readlines()
+            result=stdout.readlines()  
+            
+            messages.success(request,'success')
+
+    return redirect('servers')
 
 
 

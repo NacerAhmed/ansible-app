@@ -38,6 +38,21 @@ class Setup(models.Model):
     exec_play_rem_dir=models.CharField(max_length=150)
     
 
+class Playbook(models.Model):
+    name = models.ForeignKey(Server, on_delete=models.CASCADE)
+    desc= models.CharField(max_length=150)
+    
+    
+class Package(models.Model):
+    playbook = models.ForeignKey(Playbook, on_delete=models.CASCADE)
+    name= models.CharField(max_length=150)
+    desc= models.CharField(max_length=150)
+    is_installed = models.BooleanField(default=False)
+    
+    
+
+       
+
 Group.add_to_class('description', models.CharField(max_length=180,null=True, blank=True))
 User.add_to_class('poste', models.CharField(max_length=180,null=True, blank=True))
 User.add_to_class('tel', models.CharField(max_length=180,null=True, blank=True))

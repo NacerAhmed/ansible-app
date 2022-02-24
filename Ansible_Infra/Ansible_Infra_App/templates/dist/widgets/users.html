@@ -1836,11 +1836,11 @@
 																	<!--end::User-->
 																</td>
 																{% if user_account.is_superuser == True %}
-																<td class="text-primary">Administrator</td>                                         
-                                                               
+																<td class="text-primary"><div class="badge badge-light-primary fs-7">Administrator</div></td>  
+
                                                                 {% else %} 
     
-																<td class="text-primary">{{user_account.groups.all.0.description}}</td>  
+																<td class="text-primary"><div class="badge badge-light-info fs-7">{{user_account.groups.all.0.description}}</div></td>  
                                                                 
     
                                                                {% endif %} 

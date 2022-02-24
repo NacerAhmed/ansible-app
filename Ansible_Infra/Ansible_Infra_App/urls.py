@@ -19,4 +19,10 @@ urlpatterns = [
     path('servers/delete-server/<int:server_id>', delete_server, name='delete_server' ),
     path('servers/ping-ssh-test', ping_ssh_test, name='pingssh' ),
     path('servers/server/update-status/<int:server_id>', update_status, name='update_status'),
+    path('servers/server/install_pachakge/httpd/<int:server_id>', install_httpd, name='install_httpd'),
+    path('servers/server/install_pachakge/php/<int:server_id>', install_php, name='install_php'),
+    path('servers/server/install_pachakge/mariadb/<int:server_id>', install_mariadb, name='install_mariadb'), 
+    path('servers/server/install_pachakge/git/<int:server_id>', install_git, name='install_git'), 
+
+
 ]
