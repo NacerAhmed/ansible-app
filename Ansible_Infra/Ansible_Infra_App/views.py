@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.models import User, auth, Group
-from .models import Access, Server, Setup
+from .models import Access, Project, Server, Setup
 from django.shortcuts import render , redirect
 from django.contrib import messages
 import paramiko
@@ -10,6 +10,7 @@ import socket
 import os
 from django.db.models import Q
 import fileinput
+from datetime import datetime   
 import subprocess
 import sys
 import logging
@@ -32,17 +33,20 @@ def index(request):
             users=User.objects.filter(~Q(is_superuser= True))
             setup=Setup.objects.all()
             groups=Group.objects.all()
+            projects=Project.objects.all()
             
             user_group_count={}
             group_list_servers={}
+            group_list_projects={}
             
             for group in groups:
                
                 list_users=User.objects.filter(groups__name=group.name, is_superuser=False)                   
                 list_servers=Server.objects.filter(group=group.name) 
-                
+                list_projects=Project.objects.filter(group=group) 
                 user_group_count[group.id]=list_users.count()
                 group_list_servers[group.id]=list_servers.count()
+                group_list_projects[group.id]=list_projects.count()
                 
             setup_exist=Setup.objects.all().count()
             if setup_exist >0:
@@ -53,7 +57,7 @@ def index(request):
             actif_servers=Server.objects.filter(status='Connected')
             ssh_failed=Server.objects.filter(status='SSH Failed')
             login_failed_servers=Server.objects.filter(status='Invalid Username/Password')
-            context={'group_list_servers':group_list_servers, 'user_group_count':user_group_count, 'groups':groups, 'profiles':profiles, 'users':users, 'setup_status':setup_status, 'access':access, 'users':users, 'profile':profile,'actif_servers':actif_servers,'login_failed_servers':login_failed_servers,'ssh_failed':ssh_failed,'servers':servers}
+            context={'projects':projects, 'group_list_servers':group_list_servers, 'user_group_count':user_group_count,'group_list_projects':group_list_projects, 'groups':groups, 'profiles':profiles, 'users':users, 'setup_status':setup_status, 'access':access, 'users':users, 'profile':profile,'actif_servers':actif_servers,'login_failed_servers':login_failed_servers,'ssh_failed':ssh_failed,'servers':servers}
             return render(request, 'dist/index.html',context)
         else:
             
@@ -408,6 +412,178 @@ def access(request):
         return redirect('login')
 
 
+def projects(request):
+    
+    if  request.user.is_authenticated:
+        profiles=Profile.objects.all()
+        profile_avatar=Profile.objects.get(user_id=request.user.id)
+        users=User.objects.filter(is_superuser=False)
+
+        if request.user.is_superuser==True:
+            
+            if request.method == 'POST':
+                master=Server.objects.get(master=True)
+                setup=Setup.objects.get(status="completed")
+                backup_dir=setup.backup_directory
+                project_title=request.POST['project_title']
+                project_details=request.POST['project_details']
+                dir_path="/var/www/html/"+request.POST['dir_path']
+                users_list=request.POST.getlist('users')
+                servers_list=request.POST.getlist('servers')
+                group=Group.objects.get(name=request.POST['group'])  
+                
+                if 'git' in request.POST: 
+                    git_dir=True
+                    playbook='Playbook_create_Git_Dir.yml'
+                else:
+                    git_dir=False    
+                    playbook='Playbook_create_Dir.yml'
+                    
+                t = paramiko.Transport((master.ip, 22))
+                t.connect(username=master.superuser_name, password=master.superuser_password)
+                sftp = paramiko.SFTPClient.from_transport(t)
+                sftp.get(setup.play_rem_dir+'/'+playbook ,os.path.abspath(backup_dir)+'\\'+playbook)
+
+
+                         
+                with fileinput.FileInput(backup_dir+'/'+playbook, inplace=True,) as file:
+                    for line in file:
+                        print(line.replace("var_folder",dir_path), end='')
+                    
+                dest=setup.exec_play_rem_dir
+                source=backup_dir+'/'+playbook
+                port=22
+                   
+                t = paramiko.Transport((master.ip, 22))
+                t.connect(username=master.superuser_name, password=master.superuser_password)
+                sftp = paramiko.SFTPClient.from_transport(t)
+                sftp.put(source, dest+ "/Executed_"+playbook )
+                    
+                for server_id in servers_list:
+                    project_server=Server.objects.get(id=int(server_id))
+                    ansible_playbook_command = 'ansible-playbook '+setup.exec_play_rem_dir+'/Executed_'+playbook+' -i '+setup.inventory+' --limit '+project_server.ip 
+                    ssh=paramiko.SSHClient()
+                    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                    ssh.connect(master.ip,port,master.superuser_name,master.superuser_password)
+                    stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+                    error=stderr.readlines()
+                    result=stdout.readlines()    
+                    ssh.close() 
+
+               
+                    
+                project=Project(title=project_title, desc=project_details, git_dir=git_dir, dir_path=dir_path, group=group, created_at=datetime.now())
+                users=User.objects.all()
+                project.save()
+                
+                for id in users_list:
+                    for user in users:
+                        if user.id == int(id):
+                            project.users.add(user)
+                            
+
+                
+                messages.success(request,'The Project Has been successfully Created')
+                return redirect('projects')
+            
+            
+            servers=Server.objects.all()
+            groups=Group.objects.all()
+            projects=Project.objects.all()
+            git_proj=Project.objects.filter(git_dir=True).count()
+            loc_proj=Project.objects.filter(git_dir=False).count()
+            context={'git_proj':git_proj,'loc_proj':loc_proj,'profile_avatar':profile_avatar, 'servers':servers,'profiles':profiles, 'groups':groups , 'users':users,'projects':projects}
+            return render (request,'dist/widgets/projects.html',context)
+        else:
+            user_group=request.user.groups.get(user=request.user)
+            servers=Server.objects.filter(group=user_group).order_by('name') 
+            projects=Project.objects.all()
+            user_projects=[]
+            git_proj=0
+            loc_proj=0
+            total_projects=0
+            
+            for project in projects:
+                if request.user  in project.users.all():
+                    total_projects+=1
+                    user_projects.append(project)
+                    if  project.git_dir==True:
+                        git_proj+=1
+                    else:
+                        loc_proj+=1
+           
+
+            context={"total_projects":total_projects, 'git_proj':git_proj,'loc_proj':loc_proj,'profile_avatar':profile_avatar,'profiles':profiles, 'servers':servers,'user_projects':user_projects}
+            return render (request,'dist/widgets/projects.html',context)
+    
+    
+      
+    else:
+        return redirect('login')
+
+
+def project(request,project_id):
+    if request.user.is_authenticated:
+
+        if request.user.is_superuser == True:
+            project=Project.objects.get(id=project_id)
+            
+            if request.method == 'POST':
+                master=Server.objects.get(master=True)
+                setup=Setup.objects.get(status='completed')
+                backup_dir=setup.backup_directory
+                origin = request.POST['origin']
+                branch = request.POST['branch']
+                t = paramiko.Transport((master.ip, 22))
+                t.connect(username=master.superuser_name, password=master.superuser_password)
+                sftp = paramiko.SFTPClient.from_transport(t)
+                sftp.get(setup.play_rem_dir+'/Playbook_clone_repo.yml',os.path.abspath(backup_dir)+'\Playbook_clone_repo.yml')
+
+
+                         
+                with fileinput.FileInput(backup_dir+'/Playbook_clone_repo.yml', inplace=True,) as file:
+                    for line in file:
+                        print(line.replace("var_git_origin",origin), end='')
+                        
+                with fileinput.FileInput(backup_dir+'/Playbook_clone_repo.yml', inplace=True,) as file:
+                    for line in file:
+                        print(line.replace("var_branch",branch), end='')
+                        
+                with fileinput.FileInput(backup_dir+'/Playbook_clone_repo.yml', inplace=True,) as file:
+                    for line in file:
+                        print(line.replace("var_path",project.dir_path), end='')
+
+
+                dest=setup.exec_play_rem_dir
+                source=backup_dir+'/Playbook_clone_repo.yml'
+                port=22
+                   
+                t = paramiko.Transport((master.ip, 22))
+                t.connect(username=master.superuser_name, password=master.superuser_password)
+                sftp = paramiko.SFTPClient.from_transport(t)
+                sftp.put(source, dest+ "/Executed_Playbook_clone_repo.yml" )
+                
+                ansible_playbook_command = 'ansible-playbook '+setup.exec_play_rem_dir+'/Executed_Playbook_clone_repo.yml -i '+setup.inventory+' --limit '+project.group.name 
+
+                ssh=paramiko.SSHClient()
+                ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+                ssh.connect(master.ip,port,master.superuser_name,master.superuser_password)
+                stdin,stdout,stderr=ssh.exec_command(ansible_playbook_command)
+                error=stderr.readlines()
+                result=stdout.readlines()    
+
+                ssh.close() 
+                
+                messages.success(request,'You Have Successfully Clone The Branche: '+branch+' Of Oringin: '+origin)
+                return redirect ('/projects/project/'+str(project_id)) 
+            
+            
+            profiles=Profile.objects.all()
+            context={'project':project,'profiles':profiles}
+    
+    return render (request,'dist/widgets/project.html',context)
+    
+
 def addserver(request):
     if request.user.is_authenticated:
         
@@ -674,7 +850,7 @@ def install_httpd(request,server_id):
             error=stderr.readlines()
             result=stdout.readlines()  
             
-            messages.success(request,'success')
+            messages.success(request,'The Apache Package Has been successfully Installed')
 
     return redirect('servers')
 
@@ -697,7 +873,7 @@ def install_php(request,server_id):
             error=stderr.readlines()
             result=stdout.readlines()  
             
-            messages.success(request,'success')
+            messages.success(request,'PHP Package Has been successfully Installed')
 
     return redirect('servers')
 
@@ -721,7 +897,7 @@ def install_mariadb(request,server_id):
             error=stderr.readlines()
             result=stdout.readlines()  
             
-            messages.success(request,'success')
+            messages.success(request,'MySql Package Has been successfully Installed')
 
     return redirect('servers')
 
@@ -744,7 +920,7 @@ def install_git(request,server_id):
             error=stderr.readlines()
             result=stdout.readlines()  
             
-            messages.success(request,'success')
+            messages.success(request,'Git Package Has been successfully Installed')
 
     return redirect('servers')
 

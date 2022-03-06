@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User,Group
+from datetime import datetime   
 
 class Server(models.Model):
     name = models.CharField(max_length=50)
@@ -37,11 +38,22 @@ class Setup(models.Model):
     play_rem_dir=models.CharField(max_length=150)
     exec_play_rem_dir=models.CharField(max_length=150)
     
-
-class Playbook(models.Model):
-    name = models.ForeignKey(Server, on_delete=models.CASCADE)
-    desc= models.CharField(max_length=150)
+class Project(models.Model):
+    title = models.CharField(max_length=150)  
+    desc= models.CharField(max_length=150)  
+    status= models.CharField(max_length=150) 
+    dir_path= models.CharField(max_length=150)  
+    git_dir= models.BooleanField(default=False)
+    group=models.ForeignKey(Group, on_delete=models.CASCADE)
+    users=models.ManyToManyField(User)
+    created_at=models.DateTimeField(default=datetime.now, blank=True)
     
+    
+class Playbook(models.Model):
+    name= models.CharField(max_length=150)
+    desc= models.CharField(max_length=150)
+
+  
     
 class Package(models.Model):
     playbook = models.ForeignKey(Playbook, on_delete=models.CASCADE)

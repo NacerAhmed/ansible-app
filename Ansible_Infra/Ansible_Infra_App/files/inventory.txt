@@ -1,6 +1,8 @@
-[qualif]
 [dev]
+192.168.33.14  ansible_ssh_user=vagrant ansible_ssh_pass=vagrant ansible_sudo_pass=vagrant
+192.168.33.13  ansible_ssh_user=vagrant ansible_ssh_pass=vagrant ansible_sudo_pass=vagrant
 [prod]
+192.168.33.3  ansible_ssh_user=slave3 ansible_ssh_pass=slave3 ansible_sudo_pass=slave3
 [all:vars]
 ansible_connectin=ssh
-host_key_checking=False
+host_key_checking = False

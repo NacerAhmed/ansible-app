@@ -203,40 +203,22 @@
 									</div>
                                 </div>
 								<div data-kt-menu-trigger="click" class="menu-item here  menu-accordion">
-									<span class="menu-link">
-										<span class="menu-icon">
-											<!--begin::Svg Icon | path: icons/duotune/general/gen025.svg-->
-											<span class="svg-icon svg-icon-2">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-													<path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="black"></path>
-													<path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="black"></path>
-												</svg>
-											</span>
-											<!--end::Svg Icon-->
-										</span>
-										<span class="menu-title">Projects</span>
-										<span class="menu-arrow"></span>
-									</span>
+								
 				
-									<div class="menu-sub menu-sub-accordion menu-active-bg">
-										<div class="menu-item">
-											<a class="menu-link" href="{% url 'access' %}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
+									<div class="menu-item here  menu-accordion">
+										<a class="menu-link" href="{% url 'projects' %}" title="" >
+											<span class="menu-icon">
+												<!--begin::Svg Icon | path: icons/duotune/general/gen019.svg-->
+												<span class="svg-icon svg-icon-2">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<path opacity="0.3" d="M20 15H4C2.9 15 2 14.1 2 13V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V13C22 14.1 21.1 15 20 15ZM13 12H11C10.5 12 10 12.4 10 13V16C10 16.5 10.4 17 11 17H13C13.6 17 14 16.6 14 16V13C14 12.4 13.6 12 13 12Z" fill="black"></path>
+														<path d="M14 6V5H10V6H8V5C8 3.9 8.9 3 10 3H14C15.1 3 16 3.9 16 5V6H14ZM20 15H14V16C14 16.6 13.5 17 13 17H11C10.5 17 10 16.6 10 16V15H4C3.6 15 3.3 14.9 3 14.7V18C3 19.1 3.9 20 5 20H19C20.1 20 21 19.1 21 18V14.7C20.7 14.9 20.4 15 20 15Z" fill="black"></path>
+													</svg>
 												</span>
-												<span class="menu-title">Projects list</span>
-											</a>
-										</div>
-									</div>
-									<div class="menu-sub menu-sub-accordion menu-active-bg">
-										<div class="menu-item">
-											<a class="menu-link" href="{% url 'add_user_access' %}">
-												<span class="menu-bullet">
-													<span class="bullet bullet-dot"></span>
-												</span>
-												<span class="menu-title">Add Project </span>
-											</a>
-										</div>
+												<!--end::Svg Icon-->
+											</span>
+											<span class="menu-title">Projects</span>
+										</a>
 									</div>
                                 </div>
 							
@@ -1515,7 +1497,7 @@
 																</svg>
 															</span>
 															<!--end::Svg Icon-->
-															<a href="#" class="text-warning  fw-bold fs-4 mt-2">Projects</a>
+															<a href="{% url 'projects' %}" class="text-warning  fw-bold fs-4 mt-2">Projects</a>
 														</div>
 														<!--end::Col-->
 													</div>
@@ -1687,7 +1669,7 @@
 														<div class="d-flex align-items-center flex-wrap w-100">
 															<!--begin::Title-->
 															<div class="mb-1 pe-3 flex-grow-1">
-																<a href="#" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Servers</a>
+																<a href="{% url 'servers' %}" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Servers</a>
 																<div class="text-gray-400 fw-bold fs-7">Registred</div>
 															</div>
 															<!--end::Title-->
@@ -1726,7 +1708,7 @@
 														<div class="d-flex align-items-center flex-wrap w-100">
 															<!--begin::Title-->
 															<div class="mb-1 pe-3 flex-grow-1">
-																<a href="#" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Team</a>
+																<a href="{% url 'users' %}" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Team</a>
 																{% if user.is_superuser == True %}
 																<div class="text-gray-400 fw-bold fs-7">All groups</div>
 															{% else %}
@@ -1768,7 +1750,7 @@
 														<div class="d-flex align-items-center flex-wrap w-100">
 															<!--begin::Title-->
 															<div class="mb-1 pe-3 flex-grow-1">
-																<a href="#" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Access</a>
+																<a href="{% url 'access' %}" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Access</a>
 																<div class="text-gray-400 fw-bold fs-7">Created</div>
 															</div>
 															<!--end::Title-->
@@ -1805,13 +1787,13 @@
 														<div class="d-flex align-items-center flex-wrap w-100">
 															<!--begin::Title-->
 															<div class="mb-1 pe-3 flex-grow-1">
-																<a href="#" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Projects</a>
-																<div class="text-gray-400 fw-bold fs-7">3090 Refunds</div>
+																<a href="{% url 'projects' %}" class="fs-5 text-gray-800 text-hover-primary fw-bolder">Projects</a>
+																<div class="text-gray-400 fw-bold fs-7">Active</div>
 															</div>
 															<!--end::Title-->
 															<!--begin::Label-->
 															<div class="d-flex align-items-center">
-																<div class="fw-bolder fs-5 text-gray-800 pe-1"><span class="badge badge-light-warning fw-bolder fs-8  w-100px">25 Projects</span></div>
+																<div class="fw-bolder fs-5 text-gray-800 pe-1"><span class="badge badge-light-warning fw-bolder fs-8  w-100px">{{projects.count}} Projects</span></div>
 																<!--begin::Svg Icon | path: icons/duotune/arrows/arr065.svg-->
 																<span class="svg-icon svg-icon-5 svg-icon-danger ms-1">
 																	<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -2044,6 +2026,15 @@
 																			{% if key == group.id %}
 																			 <span class="badge badge-light-info fw-bolder my-3 fs-6">{{value}} </span><br>
 																			 <span class="text-muted fw-bold d-block fs-7">Servers</span>
+																			{% endif %}
+																			{% endfor %}
+																		</td>
+
+																		<td class="text-center">
+																			{% for key, value in group_list_projects.items %} 
+																			{% if key == group.id %}
+																			 <span class="badge badge-light-info fw-bolder my-3 fs-6">{{value}} </span><br>
+																			 <span class="text-muted fw-bold d-block fs-7">Projects</span>
 																			{% endif %}
 																			{% endfor %}
 																		</td>
@@ -6870,8 +6861,8 @@
 										<!--end::Avatar-->
 										<!--begin::Details-->
 										<div class="ms-5">
-											<a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">Max Smith</a>
-											<div class="fw-bold text-muted">max@kt.com</div>
+											<a href="#" class="fs-5 fw-bolder text-gray-900 text-hover-primary mb-2">{{project.title}}</a>
+											<div class="fw-bold text-muted">{{project.desc}}</div>
 										</div>
 										<!--end::Details-->
 									</div>
